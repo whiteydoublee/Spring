@@ -22,5 +22,6 @@
 	</beans:bean>
 	
 	<context:component-scan base-package="kr.co.ch02" />
+	<context:component-scan base-package="kr.co.ch02.sub1" />
 	
 </beans:beans>

@@ -1,5 +1,8 @@
-package sub1;
+package kr.co.ch02.sub1;
 
+import javax.inject.Inject;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.GenericXmlApplicationContext;
 
@@ -16,32 +19,36 @@ import org.springframework.context.support.GenericXmlApplicationContext;
  * */
 
 public class IocTest {
+	
+	
 	public static void main(String[] args) {
 		
 		//DI (Ioc 구현기술)를 활용하지 않은 객체 생성
-		Tv ltv = new LgTv();
-		Tv stv = new SamsungTv();
+		Tv tv1 = new LgTv();
+		Tv tv2 = new SamsungTv(); 
 		
-		ltv.powerOn();
-		ltv.chUp();
-		ltv.powerOff();
+		tv1.powerOn();
+		tv1.chUp();
+		tv1.powerOff();
 		
-		stv.powerOn();
-		stv.chUp();
-		stv.powerOff();
+		tv2.powerOn();
+		tv2.chUp();
+		tv2.powerOff();
 		
-		//DI를 활용한 객체 주입
-		ApplicationContext ctx = new GenericXmlApplicationContext("classpath:root-context.xml");
+		// 스프링컨테이너의 객체를 가져와 실행하는 방식
+		ApplicationContext ctx = new GenericXmlApplicationContext("root-context.xml");
 		
 		Tv lgTv = (Tv) ctx.getBean("lgTv");
 		Tv samsungTv = (Tv) ctx.getBean("samsungTv");
 		
 		lgTv.powerOn();
 		lgTv.chDown();
+		lgTv.soundDown();
 		lgTv.powerOff();
 		
 		samsungTv.powerOn();
 		samsungTv.chUp();
+		samsungTv.soundUp();
 		samsungTv.powerOff();
 		
 	}

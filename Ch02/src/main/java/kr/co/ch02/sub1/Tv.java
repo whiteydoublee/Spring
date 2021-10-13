@@ -1,4 +1,4 @@
-package sub1;
+package kr.co.ch02.sub1;
 
 public interface Tv {
 	public void powerOn();
@@ -6,4 +6,8 @@ public interface Tv {
 	
 	public void chUp();
 	public void chDown();
+	
+	public void soundUp();
+	public void soundDown();
+	
 }
