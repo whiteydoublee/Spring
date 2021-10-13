@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.member">
+
+	<insert id="insertMember">
+		INSERT INTO `MEMBER` VALUES(#{uid},#{name},#{hp},#{pos}, #{dep}, #{rdate});
+	</insert>
+	
+	<select id="selectMember" resultType="kr.co.ch05.vo.UserVO">
+	</select>
+	
+	<select id="selectMembers" resultType="kr.co.ch05.vo.UserVO">
+		SELECT * FROM `MEMBER`;
+	</select>
+	
+	<update id="updateMember">
+	</update>
+	
+	<delete id="deleteMember">
+	</delete>
+</mapper>
