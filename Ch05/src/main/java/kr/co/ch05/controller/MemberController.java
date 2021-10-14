@@ -22,8 +22,9 @@ public class MemberController {
 	
 	@RequestMapping(value="/member/list", method = RequestMethod.GET)
 	public String list(Model model) {
-		
-		return "/member/list";
+		List<MemberVO> members = service.selectMembers();
+		model.addAttribute("members",members);
+		return "redirect:/member/list";
 	}
 	
 	@RequestMapping(value="/member/modify", method = RequestMethod.GET)
@@ -42,9 +43,10 @@ public class MemberController {
 		
 		return "/member/register";
 	}
+	
 	@PostMapping("/member/register")
 	public String register(MemberVO vo) { // 오버로딩 메서드
-		
+		service.insertMember(vo);
 		return "redirect:/member/list";
 	}
 	

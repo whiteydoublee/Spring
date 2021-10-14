@@ -8,7 +8,7 @@
 </head>
 <body>
 	<h3>직원목록</h3>
-	<a href="#">직원등록</a>
+	<a href="/ch05/member/register">직원등록</a>
 	<table border="1"> 
 		<tr>
 			<th>아이디</th>
@@ -19,18 +19,20 @@
 			<th>입사일</th>
 			<th>기타</th>
 		</tr>
+		<c:forEach var="member" items="members">
 			<tr>
-				<td>A101</td>
-				<td>홍길동</td>
-				<td>010-5656-8989</td>
-				<td>과장</td>
-				<td>101</td>
-				<td>2016-11-30</td>
+				<td>${member.uid }</td>
+				<td>${member.name }</td>
+				<td>${member.hp }</td>
+				<td>${member.pos }</td>
+				<td>${member.dep }</td>
+				<td>${member.rdate }</td>
 				<td>
 					<a href="#">수정</a>
 					<a href="#">삭제</a>
 				</td>
 			</tr>
+		</c:forEach>
 	</table>
 </body>
 </html>

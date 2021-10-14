@@ -1,5 +1,7 @@
 package kr.co.ch05.service;
 
+import java.util.List;
+
 import javax.inject.Inject;
 
 import org.springframework.stereotype.Service;
@@ -17,7 +19,9 @@ public class MemberService {
 		dao.insertMember(vo);
 	}
 	public void selectMember() {}
-	public void selectMembers() {}
+	public List<MemberVO> selectMembers() {
+		return dao.selectMembers();
+	}
 	public void updateMember() {}
 	public void deleteMember() {}
 }
