@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+	<meta charset="UTF-8">
+	<title>list</title>
+</head>
+<body>
+	<h3>직원목록</h3>
+	<a th:href="@{/member/register}">직원등록</a>
+	<table border="1"> 
+		<tr>
+			<th>아이디</th>
+			<th>이름</th>
+			<th>휴대폰</th>
+			<th>직급</th>
+			<th>부서</th>
+			<th>입사일</th>
+			<th>기타</th>
+		</tr>
+			<tr th:each="member:${members}">
+				<td th:text="${member.uid }"></td>
+				<td th:text="${member.name }"></td>
+				<td th:text="${member.hp }"></td>
+				<td th:text="${member.pos }"></td>
+				<td th:text="${member.dep }"></td>
+				<td th:text="${member.rdate.substring(2,10) }"></td>
+				<td>
+					<a th:href="@{/member/modify(uid=${member.uid})}">수정</a>
+					<a th:href="@{/member/delete(uid=${member.uid})}">삭제</a>
+				</td>
+			</tr>
+	</table>
+</body>
+</html>

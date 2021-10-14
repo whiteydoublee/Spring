@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="mapper.customer">
+
+	<insert id="insertcustomer">
+		INSERT INTO `CUSTOMER` VALUES(#{uid},#{name}, #{address},#{hp});
+	</insert>
+	
+	<select id="selectcustomer">
+	</select>
+	
+	<select id="selectcustomers">
+		SELECT * FROM `customer`;
+	</select>
+	
+	<update id="updatecustomer">
+	</update>
+	
+	<delete id="deletecustomer">
+	</delete>
+</mapper>
