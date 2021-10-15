@@ -6,7 +6,7 @@
 </head>
 <body>
 	<h3>고객목록</h3>
-	<a href="/Ch07/customer/register.do">고객등록</a>
+	<a th:href="@{/customer/register}">고객등록</a>
 	<table border="1">
 		<tr>
 			<th>아이디</th>
@@ -15,14 +15,14 @@
 			<th>휴대폰</th>
 			<th>기타</th>
 		</tr>
-			<tr>
-				<td>${customer.custid}</td>
-				<td>${customer.name}</td>
-				<td>${customer.address}</td>
-				<td>${customer.phone}</td>
+			<tr th:each="customer:${customers}">
+				<td>[[${customer.custid}]]</td>
+				<td>[[${customer.name}]]</td>
+				<td>[[${customer.address}]]</td>
+				<td>[[${customer.phone}]]</td>
 				<td>
-					<a href="/Ch07/customer/modify.do?custid=${customer.custid}">수정</a>
-					<a href="/Ch07/customer/delete.do?custid=${customer.custid}">삭제</a>
+					<a th:href="@{/customer/modify(custid=${customer.custid})}">수정</a>
+					<a th:href="@{/customer/delete(custid=${customer.custid})}">삭제</a>
 				</td>
 			</tr>
 	</table>

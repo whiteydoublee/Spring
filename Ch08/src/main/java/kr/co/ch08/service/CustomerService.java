@@ -14,9 +14,19 @@ public class CustomerService {
 	@Autowired
 	private CustomerDao dao;
 	
-	public void insertCustomer() {}
-	public void selectCustomer() {}
-	public void selectCustomers(){}
-	public void updateCustomer() {}
-	public void deleteCustomer() {}
+	public void insertcustomer(CustomerVo vo) {
+		dao.insertcustomer(vo);
+	}
+	public CustomerVo selectcustomer(String custid) {
+		return dao.selectcustomer(custid);
+	}
+	public List<CustomerVo> selectcustomers(){
+		return dao.selectcustomers();
+	}
+	public void updatecustomer(CustomerVo vo) {
+		dao.updatecustomer(vo);
+	}
+	public void deletecustomer(String custid) {
+		dao.deletecustomer(custid);
+	}
 }

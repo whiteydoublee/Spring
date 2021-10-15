@@ -10,7 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class CustomerVo {
-	private String uid;
+	private String custid;
 	private String name;
 	private String address;
 	private String phone;

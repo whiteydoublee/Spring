@@ -2,22 +2,30 @@
 <!DOCTYPE mapper
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-<mapper namespace="mapper.customer">
+<mapper namespace="kr.co.ch08.dao.CustomerDao">
 
 	<insert id="insertcustomer">
-		INSERT INTO `CUSTOMER` VALUES(#{uid},#{name}, #{address},#{hp});
+		INSERT INTO `CUSTOMER` SET `name`=#{name}, `address` = #{address}, `phone`= #{phone};
 	</insert>
 	
-	<select id="selectcustomer">
+	<select id="selectcustomer" resultType="kr.co.ch08.vo.CustomerVo">
+		SELECT * FROM `CUSTOMER` WHERE `custid`=#{custid};
 	</select>
 	
-	<select id="selectcustomers">
-		SELECT * FROM `customer`;
+	<select id="selectcustomers" resultType="kr.co.ch08.vo.CustomerVo">
+		SELECT * FROM `CUSTOMER`;
 	</select>
 	
 	<update id="updatecustomer">
+		UPDATE `CUSTOMER` SET 
+					`name`=#{name},
+					`address`=#{address},
+					`phone`=#{phone}
+				WHERE 
+					`custid`=#{custid};
 	</update>
-	
+		
 	<delete id="deletecustomer">
+	 	DELETE FROM `CUSTOMER` WHERE `custid`=#{custid};
 	</delete>
 </mapper>

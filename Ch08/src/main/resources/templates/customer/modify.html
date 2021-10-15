@@ -6,23 +6,23 @@
 </head>
 <body>
 	<h3>고객수정</h3>
-	<form action="/Ch07/customer/modify.do" method="post">
+	<form th:action="@{/customer/modify}" method="post">
 		<table border="1">
 			<tr>
 				<td>아이디</td>
-				<td><input type="text" name="custid" value="${customer.custid}" readonly /></td>
+				<td><input type="text" name="custid" th:value="${customerVo.custid}" readonly /></td>
 			</tr>
 			<tr>
 				<td>이름</td>
-				<td><input type="text" name="name" value="${customer.name}"/></td>
+				<td><input type="text" name="name" th:value="${customerVo.name}"/></td>
 			</tr>
 			<tr>
 				<td>주소</td>
-				<td><input type="text" name="address" value="${customer.address}"/></td>
+				<td><input type="text" name="address" th:value="${customerVo.address}"/></td>
 			</tr>
 			<tr>
 				<td>휴대폰</td>
-				<td><input type="text" name="phone" value="${customer.phone}"/></td>
+				<td><input type="text" name="phone" th:value="${customerVo.phone}"/></td>
 			</tr>
 			<tr>
 				<td colspan="2" align="right">

@@ -9,10 +9,10 @@ import kr.co.ch08.vo.CustomerVo;
 @Repository
 public interface CustomerDao {
 	
-	public void insertCustomer();
-	public CustomerVo selectCustomer();
-	public List<CustomerVo> selectCustomers();
-	public void updateCustomer();
-	public void deleteCustomer();
+	public void insertcustomer(CustomerVo vo);
+	public CustomerVo selectcustomer(String custid);
+	public List<CustomerVo> selectcustomers();
+	public void updatecustomer(CustomerVo vo);
+	public void deletecustomer(String custid);
 
 }
