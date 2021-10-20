@@ -14,6 +14,9 @@ public interface MemberDao {
 	public MemberVo selectMember(String uid, String pass);
 	public List<MemberVo> selectMembers();
 	public int selectCountUid(String uid);
+	public int selectCountNick(String nick);
+	public int selectCountEmail(String email);
+	public int selectCountHp(String hp);
 	
 	public void updateMember(MemberVo vo);
 	public void deleteMember(String uid);

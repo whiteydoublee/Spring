@@ -5,32 +5,115 @@
     <title>회원가입</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:src="@{/js/zipcode.js}"></script>
     <script>
-    	$(function(){
-			
-			$('input[name=uid]').focusout(function(){
-				//alert('포커스아웃!');
-				
-				// 입력한 아이디 가져오기
-				var uid = $(this).val();
-				
-				// Json 생성
-				var jsonData = {'uid':uid};
-				
-				// Ajax 통신
-				$.ajax({
-					url: '/member/checkUid',
-					type: 'GET',
-					data: jsonData,
-					dataType: 'json',
-					success: function(data){
-						alert(data.result);
+    $(function(){
+		$('input[name=uid]').focusout(function(){
+			// alert('포커스아웃!');
+			// 입력한 아이디 가져오기
+			var uid = $(this).val();
+			// Json데이터 생성 
+			var jsonData = {'uid': uid}; // json은 자바스크립트 문법 객체표현 키:값 형식 get방식으로 보낼 키와 값을 지정해준다. 
+			// ajax 통신 			
+			$.ajax({
+				url: '/member/checkUid', // 요청할 주소
+				type: 'get', // 요청방식
+				data: jsonData, // 서버로부터 보내는 데이터 옵션 
+				dataType:'json', // 서버로 부터 전송받는 데이터 형식 일반적인 타입은 json
+				success:function(data){ // data 객체의 멤버 result값을 가져올것이다.
+					// alert(data.result); 
+					if (uid ==''){
+						$('.resultId').css('color','red').text('유효하지 않은 아이디입니다. 아이디를 입력해주세요.');	
 					}
-				});
-				
-			
+					else if(data.result == 1){
+						$('.resultId').css('color','red').text('이미 아이디가 존재합니다.');
+					}else{
+						$('.resultId').css('color','green').text('사용가능한 아이디입니다.');
+					}
+					//alert(data.result);
+					
+				} // 서버로부터 전송받는 데이터를 성공적으로 받았을 경우 
 			});
 		});
+		$('input[name=pass2]').focusout(function(){
+			var pass1 = $('input[name=pass1]').val();
+			var pass2 = $(this).val();
+			
+			if(!pass1||!pass2){
+				$('.resultPass').css('color','red').text('정확한 비밀번호를 입력하여주세요.');
+			}
+			else if(pass1 == pass2){
+				$('.resultPass').css('color','green').text('비밀번호가 일치합니다.');
+			}else{
+				$('.resultPass').css('color','red').text('비밀번호가 일치하지 않습니다.');
+			}
+		});
+		
+		$('input[name=nick]').focusout(function(){
+			var nick = $(this).val();
+			var jsonData = {'nick': nick };
+			$.ajax({
+				url:'/member/checkNick',
+				type:'get',
+				data: jsonData,
+				dataType:'json',
+				success:function(data){
+					if (nick==''){
+						$('.resultNick').css('color','red').text('유효하지 않은 닉네임입니다. 닉네임을 입력해주세요.');	
+					}
+					else if(data.result == 1){
+						$('.resultNick').css('color','red').text('이미 닉네임이 존재합니다.');
+					}else{
+						$('.resultNick').css('color','green').text('사용가능한 닉네임입니다.');
+					}
+				}		
+			});	
+		});
+		
+		$('input[name=email]').focusout(function(){
+			var email = $(this).val();
+			var jsonData = {'email': email };
+			$.ajax({
+				url:'/member/checkEmail',
+				type:'get',
+				data: jsonData,
+				dataType:'json',
+				success:function(data){
+					if (email==''){
+						$('.resultEmail').css('color','red').text('유효하지 않은 이메일입니다. 이메일을 입력해주세요.');	
+					}else if(data.result == 1){
+						$('.resultEmail').css('color','red').text('이미 사용하고 있는 이메일입니다.');
+					}else{
+						$('.resultEmail').css('color','green').text('사용가능한 이메일입니다.');
+					}
+				}		
+			});	
+		});
+		
+		$('input[name=hp]').focusout(function(){
+			var hp = $(this).val();
+			var jsonData = {'hp': hp };
+			$.ajax({
+				url:'/member/checkHp',
+				type:'get',
+				data: jsonData,
+				dataType:'json',
+				success:function(data){
+					if (hp==''){
+						$('.resultHp').css('color','red').text('유효하지 않은 번호입니다. 정확한 휴대전화번호를 입력해주세요.');	
+					}
+					else if(data.result == 1){
+						$('.resultHp').css('color','red').text('이미 사용중인 전화번호입니다.');
+					}else{
+						$('.resultHp').css('color','green').text('사용가능한 전화번호입니다.');
+					}
+				}		
+			});	
+		});
+			
+});
+    
     </script>
     
     
@@ -82,26 +165,28 @@
                         <td>E-Mail</td>
                         <td>
                             <input type="email" name="email" placeholder="이메일 입력"/>
+                            <span class="resultEmail"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>휴대폰</td>
                         <td>
                             <input type="text" name="hp" placeholder="- 포함 13자리 입력" minlength="13" maxlength="13" />
+                            <span class="resultHp"></span>
                         </td>
                     </tr>
                     <tr>
                         <td>주소</td>
                         <td>
                             <div>
-                                <input type="text" name="zip" placeholder="우편번호" readonly/>
-                                <button class="btnZip">주소검색</button>
-                            </div>                            
-                            <div>
-                                <input type="text" name="addr1" placeholder="주소를 검색하세요." readonly/>
+                                <input type="text" id="zip" name="zip" placeholder="우편번호" readonly/>
+                                <button type="button" class="btnZip" onclick="zipcode()">주소검색</button>
+                            </div>
+                            <div> <!-- 여기서 id값은 주소값을 셋팅하기위해서 제이쿼리문을 사용하도록 설정하는 값이다. -->
+                                <input type="text" id="addr1" name="addr1" placeholder="주소를 검색하세요." readonly/>
                             </div>
                             <div>
-                                <input type="text" name="addr2" placeholder="상세주소를 입력하세요."/>
+                                <input type="text" id="addr2" name="addr2" placeholder="상세주소를 입력하세요."/>
                             </div>
                         </td>
                     </tr>

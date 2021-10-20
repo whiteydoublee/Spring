@@ -86,4 +86,34 @@ public class MemberController {
 		json.addProperty("result", result);
 		return new Gson().toJson(json);
 	}
+	@ResponseBody
+	@GetMapping ("/member/checkNick")
+	public String checkNick(String nick) {
+		int result = service.selectCountNick(nick);
+		
+		//Json객체 생성 후 클라이언트 전송
+		JsonObject json = new JsonObject();
+		json.addProperty("result", result);
+		return new Gson().toJson(json);
+	}
+	@ResponseBody
+	@GetMapping ("/member/checkEmail")
+	public String checkEmail(String email) {
+		int result = service.selectCountEmail(email);
+		
+		//Json객체 생성 후 클라이언트 전송
+		JsonObject json = new JsonObject();
+		json.addProperty("result", result);
+		return new Gson().toJson(json);
+	}
+	@ResponseBody
+	@GetMapping ("/member/checkHp")
+	public String checkHp(String hp) {
+		int result = service.selectCountHp(hp);
+		
+		//Json객체 생성 후 클라이언트 전송
+		JsonObject json = new JsonObject();
+		json.addProperty("result", result);
+		return new Gson().toJson(json);
+	}
 }

@@ -3,18 +3,35 @@
   PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="kr.co.sboard.dao.BoardDao">
-	<insert id="insertArticle">
+	<insert id="insertArticle" useGeneratedKeys="true" keyProperty="seq">
 		INSERT INTO `article` SET 
 			`title`=#{title},
 			`content`=#{content},
+			`file`=#{file},
 			`uid`=#{uid},
 			`regip`=#{regip},
 			`rdate`=NOW();
 	</insert>
-	
+	<insert id="insertFile">
+		INSERT INTO `Jboard_file` SET
+			`parent`= #{parent},
+			`oriName`= #{oriName},
+			`newName`= #{newName},
+			`rdate`= NOW();
+	</insert>
 	<select id="selectArticle" resultType="kr.co.sboard.vo.ArticleVo">
 	</select>
 	<select id="selectArticles" resultType="kr.co.sboard.vo.ArticleVo">
+		SELECT a.*, b.nick FROM `article` AS a
+			JOIN `member` AS b ON a.uid=b.uid
+			WHERE `parent`=0 AND `cate`='free'
+			ORDER BY `rdate` DESC
+			LIMIT #{start}, 10;
+	</select>
+	
+	
+	<select id="selectCountTotal" resultType="int">
+		SELECT COUNT(`seq`) FROM `article` WHERE `parent`=0 AND `cate`='free';
 	</select>
 	
 	<update id="updateArticle"></update>
