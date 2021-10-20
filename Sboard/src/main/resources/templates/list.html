@@ -4,6 +4,14 @@
     <meta charset="UTF-8">
     <title>글목록</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <style>
+    	#board.list > .paging > .num {
+    	padding:10px;
+    	background: #9b9b9b;
+    	border: 1px solid #d7d7d7;
+    	font-weight: bold;
+    	}
+    </style>
 </head>
 <body>
     <div id="wrapper">
@@ -40,7 +48,8 @@
                 </th:block>
                 
                 <th:block th:each="num:${#numbers.sequence(groups[0],groups[1])}">
-                <a th:href="@{/list(pg=${num})}" class="num current">[[${num}]]</a>  
+                <a th:href="@{/list(pg=${num})}" th:if="${currentPage}==${num}"class="num"  >[[${num}]]</a>
+                 <a th:href="@{/list(pg=${num})}" th:unless="${currentPage}==${num}"class="num2"  >[[${num}]]</a>
                 </th:block>              
                 
                 <th:block th:if="${groups[1] < lastPageNum}">
