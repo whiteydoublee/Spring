@@ -7,7 +7,7 @@
 		INSERT INTO `article` SET 
 			`title`=#{title},
 			`content`=#{content},
-			`file`=#{file},
+			`file`=#{file}, <!-- 파일에 대한 매개변수 값을 받아와ㅏ야하므로: LEFT JOIN 함 -->
 			`uid`=#{uid},
 			`regip`=#{regip},
 			`rdate`=NOW();
@@ -19,14 +19,48 @@
 			`newName`= #{newName},
 			`rdate`= NOW();
 	</insert>
-	<select id="selectArticle" resultType="kr.co.sboard.vo.ArticleVo">
+	
+	<insert id="insertComment">
+		INSERT INTO `article` SET 
+			`parent`=#{parent},
+			`content`=#{content},
+			`uid`=#{uid},
+			`rdate`=NOW();
+	</insert>
+	
+	
+	<resultMap id="articleVoResultMap" type="kr.co.sboard.vo.ArticleVo">
+		<id column="seq" 		property="seq"/>
+		<result column="parent" 	property="parent"/>
+		<result column="comment" 	property="comment"/>
+		<result column="title" 		property="title"/>
+		<result column="content" 	property="content"/>
+		<result column="file" 		property="file"/>
+		<result column="hit" 		property="hit"/>
+		<result column="uid" 		property="uid"/>
+		<result column="rdate" 		property="rdate"/>
+		<association property="fileVo" javaType="kr.co.sboard.vo.FileVo">
+			<id column="fseq" 		  property="fseq"/>
+			<result column="fileParent"   property="parent"/>
+			<result column="oriName" 	  property="oriName"/>
+			<result column="download" 	  property="download"/>
+			<result column="rdate" 		  property="rdate"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectArticle" resultMap="articleVoResultMap">
+		SELECT a.*,b.*, b.parent AS `fileParent` FROM `article` AS a
+		LEFT JOIN `Jboard_file` AS b
+		ON a.seq = b.parent
+		WHERE `seq`=#{seq};
 	</select>
+	
 	<select id="selectArticles" resultType="kr.co.sboard.vo.ArticleVo">
 		SELECT a.*, b.nick FROM `article` AS a
-			JOIN `member` AS b ON a.uid=b.uid
-			WHERE `parent`=0 AND `cate`='free'
-			ORDER BY `rdate` DESC
-			LIMIT #{start}, 10;
+		JOIN `member` AS b ON a.uid=b.uid
+		WHERE `parent`=0 AND `cate`='free'
+		ORDER BY `rdate` DESC
+		LIMIT #{start}, 10;
 	</select>
 	
 	
@@ -34,7 +68,19 @@
 		SELECT COUNT(`seq`) FROM `article` WHERE `parent`=0 AND `cate`='free';
 	</select>
 	
+	<select id="selectFile" resultType="kr.co.sboard.vo.FileVo">
+		SELECT * FROM `Jboard_file` WHERE `fseq`=#{fseq};
+	</select>
+	
+	<!--  <select id="selectComments"  resultType="kr.co.sboard.vo.AritcleVo">
+		SELECT * FROM `article` WHERE `parent`=#{seq};
+	</select>-->
+	
 	<update id="updateArticle"></update>
+	<update id="updateFileDownload">
+		UPDATE `Jboard_file` SET `download`=`download`+1 WHERE `fseq`=#{fseq};
+	</update>
+	
 	<delete id="deleteArticle"></delete>
 </mapper>
 

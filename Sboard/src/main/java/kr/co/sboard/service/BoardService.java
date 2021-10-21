@@ -1,9 +1,14 @@
 package kr.co.sboard.service;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.util.List;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletResponse;
+
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -27,6 +32,10 @@ public class BoardService {
 	public void insertFile(FileVo vo) {
 		dao.insertFile(vo);
 	};
+	public void insertComment(ArticleVo vo) {
+		dao.insertComment(vo);
+	}
+	
 	public ArticleVo selectArticle(int seq) {
 		return dao.selectArticle(seq);
 	}
@@ -36,9 +45,47 @@ public class BoardService {
 	public int selectCountTotal() {
 		return dao.selectCountTotal();
 	}
+	
+	public FileVo selectFile(int fseq) {
+		return dao.selectFile(fseq);
+	};
+	
+//	public List<ArticleVo> selectComments(int seq) {
+//		return dao.selectComments(seq);
+//	};
+	
 	public void updateArticle(int seq) {
 		dao.updateArticle(seq);
 	}
+	public void updateFileDownload(int fseq) {
+		dao.updateFileDownload(fseq);
+		
+	};
+	
+	public void fileDownload(HttpServletResponse resp, FileVo fileVo) {
+
+		File file = new File("src/main/resources/static/file/");
+		String path = file.getAbsolutePath()+"/"+fileVo.getNewName();
+		
+		try {
+			byte[] fileByte = FileUtils.readFileToByteArray(new File(path));
+			resp.setContentType("application/octet-stream");
+			resp.setHeader("Content-Disposition", "attachment; filename="+URLEncoder.encode(fileVo.getOriName(), "utf-8"));
+			resp.setHeader("Content-Transfer-Encoding", "binary");
+			resp.setHeader("Pragma", "no-cache");
+			resp.setHeader("Cache-Control", "private");
+			
+			
+			resp.getOutputStream().write(fileByte);
+			resp.getOutputStream().flush();
+			resp.getOutputStream().close();
+			
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
 	public void deleteArticle(int seq) {
 		dao.deleteArticle(seq);
 	}

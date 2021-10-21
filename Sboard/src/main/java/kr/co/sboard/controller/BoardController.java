@@ -1,6 +1,8 @@
 package kr.co.sboard.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -8,8 +10,10 @@ import java.util.List;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -59,7 +63,11 @@ public class BoardController {
 	}
 	
 	@GetMapping("/view")
-	public String view() {
+	public String view(int seq, Model model) {
+		ArticleVo article = service.selectArticle(seq);
+//		List<ArticleVo> comments = service.selectComments(seq);
+		model.addAttribute("article",article);
+//		model.addAttribute("comments",comments);
 		return "/view";
 	}
 	
@@ -89,6 +97,23 @@ public class BoardController {
 		}
 			
 		return "redirect:/list";
+	}
+	
+	@GetMapping("/fileDownload")
+	public void fileDownload(int fseq, HttpServletResponse resp) {
+		
+		//다운로드 카운트 +1
+		service.updateFileDownload(fseq);
+		//파일 정보 가져오기 
+		FileVo fileVo = service.selectFile(fseq);
+		//파일 다운로드 수행
+		service.fileDownload(resp, fileVo);
+	}
+	
+	@PostMapping("/insertComment")
+	public String insertComment(ArticleVo vo) {
+		service.insertComment(vo);
+		return "redirect:/view?seq="+vo.getParent();
 	}
 	
 	@GetMapping("/modify")

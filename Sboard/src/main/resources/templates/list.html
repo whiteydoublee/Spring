@@ -4,14 +4,6 @@
     <meta charset="UTF-8">
     <title>글목록</title>
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
-    <style>
-    	#board.list > .paging > .num {
-    	padding:10px;
-    	background: #9b9b9b;
-    	border: 1px solid #d7d7d7;
-    	font-weight: bold;
-    	}
-    </style>
 </head>
 <body>
     <div id="wrapper">
@@ -32,7 +24,7 @@
                     </tr>
                     <tr th:each="article, i:${articles}">
                         <td>[[${pageStartNum-i.index}]]</td>
-                        <td><a th:href="@{/view}">[[${article.title}]]</a>&nbsp;&#91;[[${article.comment}]]&#93;</td>
+                        <td><a th:href="@{/view(seq=${article.seq})}">[[${article.title}]]</a>&nbsp;&#91;[[${article.comment}]]&#93;</td>
                         <td>[[${article.uid}]]</td>
                         <td>[[${article.rdate.substring(2,10)}]]</td>
                         <td>[[${article.hit}]]</td>
@@ -48,8 +40,7 @@
                 </th:block>
                 
                 <th:block th:each="num:${#numbers.sequence(groups[0],groups[1])}">
-                <a th:href="@{/list(pg=${num})}" th:if="${currentPage}==${num}"class="num"  >[[${num}]]</a>
-                 <a th:href="@{/list(pg=${num})}" th:unless="${currentPage}==${num}"class="num2"  >[[${num}]]</a>
+                <a th:href="@{/list(pg=${num})}" th:class="${num == currentPage ? 'num current':'num '}">[[${num}]]</a>
                 </th:block>              
                 
                 <th:block th:if="${groups[1] < lastPageNum}">
