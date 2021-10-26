@@ -82,17 +82,25 @@ public class BoardController {
 		vo.setRegip(regip);
 		
 		//작성글 Insert
-		int seq = 0;
-		
+		int seq = 0;// 테스트하기위해 데이터가 들어가는것을 막는다. 
+		// 파일이 들어가기전 그 글번호를 알아야하기때문에 먼저 글을 넣고 그 글번호를 구한다. 
+		// 그리고 insert하고 난후 키값을 받아올수있다는것이 핵심!!!!
 		if(vo.getFname().isEmpty()) {
-			//파일을 첨부하지 않은 경우
+			// 폼양식에서 전송한 fname키워드에 값이 있다면 파일을 첨부했다는 뜻
+			// is메서드는 상태값을 확인하는 것이므로 true아니면 false가 있다 null체크 안된다
+			// 참조변수는 왠만하면 null체크 가능 
+			// 파일을 첨부안했을때
 			vo.setFile(0);
+			
 			seq = service.insertArticle(vo);
 		}else {
-			vo.setFile(1);
-			seq = service.insertArticle(vo);
-			FileVo fvo = service.fileUpload(vo.getFname(), seq);
-			service.insertFile(fvo);
+			// 파일을 첨부했을때
+//			System.out.println("파일첨부함");
+			// 비니지스 로직은 왠만하면 전부 모델로 넘겨서한다 파일다운로드....등
+			vo.setFile(1);// 해당글의 파일이 첨부되었음
+			seq = service.insertArticle(vo);//글이 들어가는 동시에
+			FileVo fvo = service.fileUpload(vo.getFname(), seq);// 파일업로드하고 
+			service.insertFile(fvo);// 파일정보도 들어감 
 			
 		}
 			
@@ -100,7 +108,7 @@ public class BoardController {
 	}
 	
 	@GetMapping("/fileDownload")
-	public void fileDownload(int fseq, HttpServletResponse resp) {
+	public void fileDownload(int fseq, HttpServletResponse resp) {// 리스폰스객체 => 실어서보낼 객체
 		
 		//다운로드 카운트 +1
 		service.updateFileDownload(fseq);
@@ -112,12 +120,44 @@ public class BoardController {
 	
 	@PostMapping("/insertComment")
 	public String insertComment(ArticleVo vo) {
-		service.insertComment(vo);
+		
 		return "redirect:/view?seq="+vo.getParent();
 	}
 	
 	@GetMapping("/modify")
-	public String modify() {
+	public String modify( Model model,int seq) {
+		ArticleVo vo = service.selectArticle(seq);
+				model.addAttribute("article",vo);
+		return "/modify";
+	}
+	
+	@PostMapping("/modify")
+	public String modify(ArticleVo vo) {
+		service.updateArticle(vo);
+		
+		//파일이 변경되지 못해도, 파일 첨부만으로 변경으로 간
+		int seq = 0;// 테스트하기위해 데이터가 들어가는것을 막는다. 
+		// 파일이 들어가기전 그 글번호를 알아야하기때문에 먼저 글을 넣고 그 글번호를 구한다. 
+		// 그리고 insert하고 난후 키값을 받아올수있다는것이 핵심!!!!
+		if(vo.getFname().isEmpty()) {
+			// 폼양식에서 전송한 fname키워드에 값이 있다면 파일을 첨부했다는 뜻
+			// is메서드는 상태값을 확인하는 것이므로 true아니면 false가 있다 null체크 안된다
+			// 참조변수는 왠만하면 null체크 가능 
+			// 파일을 첨부안했을때
+			vo.setFile(0);
+			
+			seq = service.insertArticle(vo);
+		}else {
+			// 파일을 첨부했을때
+//			System.out.println("파일첨부함");
+			// 비니지스 로직은 왠만하면 전부 모델로 넘겨서한다 파일다운로드....등
+			vo.setFile(1);// 해당글의 파일이 첨부되었음
+			seq = service.insertArticle(vo);//글이 들어가는 동시에
+			FileVo fvo = service.fileUpload(vo.getFname(), seq);// 파일업로드하고 
+			service.insertFile(fvo);// 파일정보도 들어감 
+			
+		}
+		
 		return "/modify";
 	}
 	

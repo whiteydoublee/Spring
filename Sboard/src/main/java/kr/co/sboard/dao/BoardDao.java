@@ -19,7 +19,7 @@ public interface BoardDao {
 	public FileVo selectFile(int fseq);
 	//public List<ArticleVo> selectComments(int seq);
 	
-	public void updateArticle(int seq);
+	public void updateArticle(ArticleVo vo);
 	public void updateFileDownload(int fseq);
 	
 	public void deleteArticle(int seq);

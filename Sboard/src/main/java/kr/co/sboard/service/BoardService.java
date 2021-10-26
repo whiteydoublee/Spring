@@ -54,8 +54,8 @@ public class BoardService {
 //		return dao.selectComments(seq);
 //	};
 	
-	public void updateArticle(int seq) {
-		dao.updateArticle(seq);
+	public void updateArticle(ArticleVo vo) {
+		dao.updateArticle(vo);
 	}
 	public void updateFileDownload(int fseq) {
 		dao.updateFileDownload(fseq);
