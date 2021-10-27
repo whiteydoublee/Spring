@@ -7,6 +7,86 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
     <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
     <script th:src="@{/js/zipcode.js}"></script>
+    <script th:src="@{/js/Validation.js}"></script>
+    <script>
+	    $(function(){
+	    	
+	    	$('input[name=uid]').focusout(function(){
+		    	var uid = $(this).val();
+		    	var jsonData = {'uid':uid}; // js 객체 생성 (json은 JS문법이므로)
+		    	
+		    	$.get('/member/checkUid',jsonData, function(data){
+		    		if(uid==''){
+		    			$('.resultId').css('color','red').text('유효하지 않은 아이디입니다. 아이디를 다시 입력해주세요.');
+		    		}else if(data.result == 1) {
+		    			$('.resultId').css('color','red').text('이미 사용중인 아이디입니다.');
+		    		}else {
+		    			$('.resultId').css('color','green').text('사용가능한 아이디입니다.');
+		    		}
+		    	},'json'); 
+		    	
+	    	});
+	    	$('input[name=pass2]').focusout(function(){
+		    	var pass1 = $('input[name=pass1]').val();
+		    	var pass2 = $(this).val();
+		    	
+		    	if(!pass1||!pass2){
+		    		$('.resultPass').css('color','red').text('정확한 비밀번호를 입력하여주세요.');
+		    	}else if(pass1 == pass2){
+		    		$('.resultPass').css('color','green').text('비밀번호가 일치합니다.');
+		    	}else{
+		    		$('.resultPass').css('color','red').text('비밀번호가 일치하지 않습니다.');
+		    	}
+	    	});
+	    	$('input[name=nick]').focusout(function(){
+		    	var nick = $(this).val();
+		    	var jsonData = {'nick':nick}; // js 객체 생성 (json은 JS문법이므로)
+		    	
+		    	$.get('/member/checkNick',jsonData, function(data){
+		    		if(nick==''){
+		    			$('.resultNick').css('color','red').text('유효하지 않은 닉네임입니다. 닉네임을 다시 입력해주세요.');
+		    		}else if(data.result == 1) {
+		    			$('.resultNick').css('color','red').text('이미 사용중인 닉네임입니다.');
+		    		}else {
+		    			$('.resultNick').css('color','green').text('사용가능한 닉네임입니다.');
+		    		}
+		    	},'json'); 
+		    	
+	    	});
+	    	
+	    	$('input[name=email]').focusout(function(){
+		    	var email = $(this).val();
+		    	var jsonData = {'email':email}; // js 객체 생성 (json은 JS문법이므로)
+		    	
+		    	$.get('/member/checkEmail',jsonData, function(data){
+		    		if(email==''){
+		    			$('.resultEmail').css('color','red').text('유효하지 않은 이메일입니다. 이메일을 다시 입력해주세요.');
+		    		}else if(data.result == 1) {
+		    			$('.resultEmail').css('color','red').text('이미 사용중인 이메일입니다.');
+		    		}else {
+		    			$('.resultEmail').css('color','green').text('사용가능한 이메일입니다.');
+		    		}
+		    	},'json'); 
+		    	
+	    	});
+	    	$('input[name=hp]').focusout(function(){
+		    	var hp = $(this).val();
+		    	var jsonData = {'hp':hp}; // js 객체 생성 (json은 JS문법이므로)
+		    	
+		    	$.get('/member/checkHp',jsonData, function(data){
+		    		if(hp==''){
+		    			$('.resultHp').css('color','red').text('유효하지 않은 전화번호입니다. 번호를 다시 입력해주세요.');
+		    		}else if(data.result == 1) {
+		    			$('.resultHp').css('color','red').text('이미 사용중인 전화번호입니다.');
+		    		}else {
+		    			$('.resultHp').css('color','green').text('사용가능한 전화번호입니다.');
+		    		}
+		    	},'json'); 
+		    	
+	    	});
+	    	
+	    });
+    </script>
     
 </head>
 <body>
