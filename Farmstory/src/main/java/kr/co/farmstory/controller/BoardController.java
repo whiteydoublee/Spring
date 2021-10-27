@@ -5,6 +5,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
 import kr.co.farmstory.service.BoardService;
+import kr.co.farmstory.vo.ArticleVo;
 
 @Controller
 public class BoardController {
@@ -16,6 +17,9 @@ public class BoardController {
 		
 		model.addAttribute("group",group);
 		model.addAttribute("cate",cate);
+		
+		ArticleVo article = service.selectArticles();
+		model.addAttribute("article",article);
 		
 		return "/board/list";
 	}

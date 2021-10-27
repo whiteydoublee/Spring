@@ -13,7 +13,7 @@
             <h3>글목록</h3>
             <article>
                 <p>
-                   	홍길동님 반갑습니다.
+                   	[[${session.sessMember.nick}]]님 반갑습니다.
                     <a th:href="@{/member/logout}" class="logout">[로그아웃]</a>
                 </p>
                 <table border="0">
@@ -25,11 +25,11 @@
                         <th>조회</th>
                     </tr>
                     <tr>
-                        <td>1</td>
-                        <td><a th:href="@{/board/view(group=${group})}">제목</a>&nbsp;&#91;3&#93;</td>
-                        <td>abcd</td>
-                        <td>21-10-26</td>
-                        <td>20</td>
+                        <td>[[${article.seq}]]</td>
+                        <td><a th:href="@{/board/view(group=${group})}">[[${article.title}]]</a>&nbsp;&#91;3&#93;</td>
+                        <td>[[${article.nick}]]</td>
+                        <td>[[${article.rdate}]]</td>
+                        <td>[[${article.hit}]]</td>
                     </tr>
                 </table>
             </article>

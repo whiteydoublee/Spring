@@ -20,28 +20,15 @@
 			`rdate`= NOW();
 	</insert>
 	
-	<resultMap id="articleVoResultMap" type="kr.co.sboard.vo.ArticleVo">
-		<id column="seq" 		property="seq"/>
-		<result column="parent" 	property="parent"/>
-		<result column="comment" 	property="comment"/>
-		<result column="title" 		property="title"/>
-		<result column="content" 	property="content"/>
-		<result column="file" 		property="file"/>
-		<result column="hit" 		property="hit"/>
-		<result column="uid" 		property="uid"/>
-		<result column="rdate" 		property="rdate"/>
-		<association property="fileVo" javaType="kr.co.sboard.vo.FileVo">
-			<id column="fseq" 		  property="fseq"/>
-			<result column="fileParent"   property="parent"/>
-			<result column="oriName" 	  property="oriName"/>
-			<result column="download" 	  property="download"/>
-			<result column="rdate" 		  property="rdate"/>
-		</association>
-	</resultMap>
-	
-	<select id="selectArticle" resultMap="articleVoResultMap">
+	<select id="selectArticle">
 	</select>
-	<select id="selectArticles"></select>
+	<select id="selectArticles" resultType="kr.co.farmstory.vo.ArticleVo">
+		SELECT a.*, b.nick FROM `article` AS a
+		JOIN `member` AS b ON a.uid=b.uid
+		WHERE `parent`=0 AND `cate`='#{cate}'
+		ORDER BY `rdate` DESC
+		LIMIT #{start}, 10;
+	</select>
 	<update id="updateArticle"></update>
 	<delete id="deleteArticle"></delete>
 </mapper>
