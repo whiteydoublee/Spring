@@ -3,6 +3,7 @@ package kr.co.farmstory.controller;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,24 +44,60 @@ public class BoardController {
 			return "/board/list";
 	}
 	@GetMapping("/board/modify")
-	public String modify() {
+	public String modify(Model model, String group, String cate, int seq) {
+		
+		model.addAttribute("cate",cate);
+		model.addAttribute("group",group);
+		
+		ArticleVo article = service.selectArticle(seq);
+		model.addAttribute("article", article);
+		
 		return "/board/modify";
+	}
+	
+	@PostMapping("/board/modify")
+	public String modify(Model model, String group, String cate, ArticleVo vo) {
+		
+		model.addAttribute("cate",cate);
+		model.addAttribute("group",group);
+		
+		//파일부문
+		
+		if(vo.getFname().isEmpty()) {
+			
+			// 파일을 첨부안했을때
+			vo.setFile(0);
+			 service.updateArticle(vo);
+		}else {
+			// 파일을 첨부했을때
+//			System.out.println("파일첨부함");
+			// 비니지스 로직은 왠만하면 전부 모델로 넘겨서한다 파일다운로드....등
+			vo.setFile(1);// 해당글의 파일이 첨부되었음
+			service.updateArticle(vo);//글이 들어가는 동시에
+			FileVo fvo = service.fileUpload(vo.getFname(), vo.getSeq());// 파일업로드하고 
+			service.insertFile(fvo);// 파일정보도 들어감 
+			
+		}
+		
+		return "redirect:/board/view?group="+group+"&cate="+cate+"&seq="+vo.getSeq();
 	}
 	@GetMapping("/board/view")
 	public String view(HttpSession sess,Model model, String group, String cate,int seq) {
-		
 		model.addAttribute("group",group);
 		model.addAttribute("cate",cate);
 		
 		ArticleVo article = service.selectArticle(seq);
 		model.addAttribute("article",article);
-		
+
 		MemberVo vo = (MemberVo) sess.getAttribute("sessMember"); // vo가 value 이므로, sess멤버가 키, MemberVo를 반환하여야함.
 		if(vo == null) {
 			return "redirect:/member/login?success=101";
 		}else {
+			
 			return "/board/view";
 		}
+		
+		
 		
 	}
 	@GetMapping("/board/write")
@@ -103,5 +140,25 @@ public class BoardController {
 					
 				}
 		return "redirect:/board/list?group="+group+"&cate="+vo.getCate();
+	}
+	
+	@GetMapping ("/board/delete")
+	public String delete (String group, String cate, Model model, int seq) {
+		
+		model.addAttribute(group);
+		model.addAttribute(cate);
+		service.deleteArticle(seq);
+		
+		return "redirect:/board/list?group="+group+"&cate="+cate;
+	}
+	
+	@GetMapping("/fileDownload")
+	public void fileDownload(int fseq, HttpServletResponse resp) {// 리스폰스객체 => 실어서보낼 객체
+		//다운로드 카운트 +1
+		service.updateFileDownload(fseq);
+		//파일 정보 가져오기 
+		FileVo fileVo = service.selectFile(fseq);
+		//파일 다운로드 수행
+		service.fileDownload(resp, fileVo);
 	}
 }

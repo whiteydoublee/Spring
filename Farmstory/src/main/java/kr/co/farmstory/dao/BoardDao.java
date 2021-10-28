@@ -13,9 +13,11 @@ public interface BoardDao {
 	public int insertArticle(ArticleVo vo);
 	public void insertFile(FileVo vo);
 	public ArticleVo selectArticle(int seq);
+	public FileVo selectFile(int fseq);
 	public List<ArticleVo> selectArticles(String cate,int start);
 	public int selectCountTotal(String cate);
-	public void updateArticle();
-	public void deleteArticle();
+	public void updateArticle(ArticleVo vo);
+	public void updateFileDownload(int fseq);
+	public void deleteArticle(int seq);
 
 }

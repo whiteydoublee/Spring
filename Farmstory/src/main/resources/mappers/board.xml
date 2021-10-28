@@ -21,8 +21,30 @@
 			`rdate`= NOW();
 	</insert>
 	
-	<select id="selectArticle" resultType="kr.co.farmstory.vo.ArticleVo">
-		SELECT * from `article` WHERE `seq`=#{seq};
+	<resultMap id="articleVoResultMap" type="kr.co.farmstory.vo.ArticleVo">
+		<id column="seq" 		property="seq"/>
+		<result column="parent" 	property="parent"/>
+		<result column="comment" 	property="comment"/>
+		<result column="title" 		property="title"/>
+		<result column="content" 	property="content"/>
+		<result column="file" 		property="file"/>
+		<result column="hit" 		property="hit"/>
+		<result column="uid" 		property="uid"/>
+		<result column="rdate" 		property="rdate"/>
+		<association property="fileVo" javaType="kr.co.farmstory.vo.FileVo">
+			<id column="fseq" 		  property="fseq"/>
+			<result column="fileParent"   property="parent"/>
+			<result column="oriName" 	  property="oriName"/>
+			<result column="download" 	  property="download"/>
+			<result column="rdate" 		  property="rdate"/>
+		</association>
+	</resultMap>
+	
+	<select id="selectArticle" resultMap="articleVoResultMap">
+		SELECT a.*,b.*, b.parent AS `fileParent` FROM `article` AS a
+		LEFT JOIN `Jboard_file` AS b
+		ON a.seq = b.parent
+		WHERE `seq`=#{seq};
 	</select>
 	<select id="selectArticles" resultType="kr.co.farmstory.vo.ArticleVo">
 		SELECT a.*, b.nick FROM `article` AS a
@@ -31,13 +53,30 @@
 		ORDER BY `rdate` DESC
 		LIMIT #{start}, 10;
 	</select>
+	<select id="selectFile" resultType="kr.co.farmstory.vo.FileVo">
+		SELECT * FROM `Jboard_file` WHERE `fseq`=#{fseq};
+	</select>
 	
 	<select id="selectCountTotal" resultType="int">
 		SELECT COUNT(`seq`) FROM `article` WHERE `parent`=0 AND `cate`= #{cate};
 	</select>
 	
-	<update id="updateArticle"></update>
-	<delete id="deleteArticle"></delete>
+	<update id="updateFileDownload">
+		UPDATE `Jboard_file` SET `download`=`download`+1 WHERE `fseq`=#{fseq};
+	</update>
+	
+	<update id="updateArticle">
+		UPDATE `article` SET 
+			`title`=#{title},
+			`content`=#{content},
+			`file`=#{file}
+			
+			WHERE `seq`=#{seq} AND `cate`=#{cate};
+	</update>
+	
+	<delete id="deleteArticle">
+		DELETE FROM `article` WHERE `seq`=${seq};
+	</delete>
 </mapper>
 
 

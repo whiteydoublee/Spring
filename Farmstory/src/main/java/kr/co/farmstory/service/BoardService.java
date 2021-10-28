@@ -30,6 +30,9 @@ public class BoardService {
 	public void insertFile(FileVo vo) {
 		dao.insertFile(vo);
 	};
+	public FileVo selectFile(int fseq) {
+		return dao.selectFile(fseq);
+	};
 	public ArticleVo selectArticle(int seq) {
 		return dao.selectArticle(seq);
 	}
@@ -40,8 +43,16 @@ public class BoardService {
 		return dao.selectCountTotal(cate);
 	}
 	
-	public void updateArticle() {}
-	public void deleteArticle() {}
+	public void updateArticle(ArticleVo vo) {
+		 dao.updateArticle(vo);
+	}
+	public void updateFileDownload(int fseq) {
+		dao.updateFileDownload(fseq);
+		
+	};
+	public void deleteArticle(int seq) {
+		dao.deleteArticle(seq);
+	}
 	
 	public void fileDownload(HttpServletResponse resp, FileVo fileVo) {
 
