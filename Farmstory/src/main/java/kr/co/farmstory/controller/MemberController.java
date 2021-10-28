@@ -29,7 +29,8 @@ public class MemberController {
 	private MemberService service;
 	
 	@GetMapping("/member/login")
-	public String login() {
+	public String login(String success, Model model) {
+		model.addAttribute("success", success);
 		return "/member/login";
 	}
 	@PostMapping("/member/login")
@@ -42,7 +43,7 @@ public class MemberController {
 		}else {
 			//회원인 경우
 			sess.setAttribute("sessMember", vo);
-			return "redirect:/";
+			return "redirect:/index?success=104";
 		}
 		
 	}

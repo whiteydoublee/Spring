@@ -11,6 +11,7 @@ import lombok.Setter;
 public class ArticleVo {
 	private int seq;
 	private int parent;
+	private String cate;
 	private String comment;
 	private String title;
 	private String content;
