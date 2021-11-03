@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>케이마켓::회원가입</title>
+    <link rel="stylesheet" th:href="@{/css/member.css}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <script src="//t1.daumcdn.net/mapjsapi/bundle/postcode/prod/postcode.v2.js"></script>
+    <script th:src="@{/js/zipcode.js}"></script>
+    <script th:src="@{/js/Validation.js}"></script>
+    <script>
+	    $(function(){
+	    	
+	    	$('input[name=uid]').focusout(function(){
+		    	var uid = $(this).val();
+		    	var jsonData = {'uid':uid}; // js 객체 생성 (json은 JS문법이므로)
+		    	
+		    	$.get('/member/checkUid',jsonData, function(data){
+		    		if(uid==''){
+		    			$('.resultId').css('color','red').text('유효하지 않은 아이디입니다. 아이디를 다시 입력해주세요.');
+		    		}else if(data.result == 1) {
+		    			$('.resultId').css('color','red').text('이미 사용중인 아이디입니다.');
+		    		}else {
+		    			$('.resultId').css('color','green').text('사용가능한 아이디입니다.');
+		    		}
+		    	},'json'); 
+		    	
+	    	});
+	    	$('input[name=pass2]').focusout(function(){
+		    	var pass1 = $('input[name=pass1]').val();
+		    	var pass2 = $(this).val();
+		    	
+		    	if(!pass1||!pass2){
+		    		$('.resultPass2').css('color','red').text('정확한 비밀번호를 입력하여주세요.');
+		    	}else if(pass1 == pass2){
+		    		$('.resultPass2').css('color','green').text('비밀번호가 일치합니다.');
+		    	}else{
+		    		$('.resultPass2').css('color','red').text('비밀번호가 일치하지 않습니다.');
+		    	}
+	    	});
+	    	$('input[name=email]').focusout(function(){
+		    	var email = $(this).val();
+		    	var jsonData = {'email':email}; // js 객체 생성 (json은 JS문법이므로)
+		    	
+		    	$.get('/member/checkEmail',jsonData, function(data){
+		    		if(email==''){
+		    			$('.resultEmail').css('color','red').text('유효하지 않은 이메일입니다. 이메일을 다시 입력해주세요.');
+		    		}else if(data.result == 1) {
+		    			$('.resultEmail').css('color','red').text('이미 사용중인 이메일입니다.');
+		    		}else {
+		    			$('.resultEmail').css('color','green').text('사용가능한 이메일입니다.');
+		    		}
+		    	},'json'); 
+		    	
+	    	});
+	    	$('input[name=hp]').focusout(function(){
+		    	var hp = $(this).val();
+		    	var jsonData = {'hp':hp}; // js 객체 생성 (json은 JS문법이므로)
+		    	
+		    	$.get('/member/checkHp',jsonData, function(data){
+		    		if(hp==''){
+		    			$('.resultHp').css('color','red').text('유효하지 않은 전화번호입니다. 번호를 다시 입력해주세요.');
+		    		}else if(data.result == 1) {
+		    			$('.resultHp').css('color','red').text('이미 사용중인 전화번호입니다.');
+		    		}else {
+		    			$('.resultHp').css('color','green').text('사용가능한 전화번호입니다.');
+		    		}
+		    	},'json'); 
+		    	
+	    	});
+	    	
+	    });
+    </script>
+    
+</head>
+<body>
+    <div id="member-wrapper">
+        <th:block th:include="@{/member/_header.html}"></th:block>
+        <main>
+            <div id="member-register">
+                <h1>회원가입</h1>
+				<form th:action="@{/member/register}" method="POST">
+				<input type="hidden" name="type" value="1" />
+					<section>
+						<table>
+							<caption>필수 정보입력</caption>
+							<tr>
+								<th><span class="essential">*</span>아이디</th>
+								<td><input type="text" name="uid" placeholder="아이디를 입력"
+									required /> <span class="resultId">영문, 숫자로 4~12자까지 설정해 주세요.</span></td>
+							</tr>
+							<tr>
+								<th><span class="essential">*</span>비밀번호</th>
+								<td><input type="password" name="pass1" placeholder="비밀번호를 입력"
+									required /> <span class="resultPass1">영문, 숫자, 특수문자를 조합하여
+										8~12자까지 설정해 주세요.</span></td>
+							</tr>
+							<tr>
+								<th><span class="essential">*</span>비밀번호확인</th>
+								<td><input type="password" name="pass2" placeholder="비밀번호를 확인"
+									required /> <span class="resultPass2">비밀번호 재입력</span></td>
+							</tr>
+						</table>
+					</section>
+					<section>
+						<table>
+							<caption>기본 정보입력</caption>
+							<tr>
+								<th><span class="essential">*</span>이름</th>
+								<td><input type="text" name="name" placeholder="이름을 입력"
+									required /></td>
+							</tr>
+							<tr>
+								<th><span class="essential">*</span>성별</th>
+								<td><label><input type="radio" name="gender"
+										value="1" checked>&nbsp;남</label> <label><input
+										type="radio" name="gender" value="2">&nbsp;여</label></td>
+							</tr>
+							<tr>
+								<th><span class="essential">*</span>EMAIL</th>
+								<td><input type="email" name="email" placeholder="이메일 입력"
+									required /><span class="resultEmail"></span></td>
+							</tr>
+							<tr>
+								<th><span class="essential">*</span>휴대폰</th>
+								<td><input type="text" name="hp" maxlength="13"
+									placeholder="휴대폰번호 입력" required /> <span class="resultHp"> -
+										포함 13자리를 입력하세요.</span></td>
+							</tr>
+							<tr class="addr">
+								<th>주소</th>
+								<td>
+									<div>
+										<input type="text" name="zip" id="zip" placeholder="우편번호 입력 클릭" readonly />
+										<button type="button" class="btnZip" onclick="zipcode()">주소검색</button>
+									</div>
+									<div>
+										<input type="text" name="addr1" id="addr1" size="50"
+											placeholder="주소를 검색하세요." readonly />
+									</div>
+									<div>
+										<input type="text" name="addr2" id="addr2" size="50"
+											placeholder="상세주소를 입력하세요." />
+									</div>
+								</td>
+							</tr>
+						</table>
+		
+					</section>
+					<div>
+						<input type="submit" class="join" value="회원가입" />
+					</div>
+				</form>
+            </div>
+        </main>        
+        <th:block th:include="@{/member/_footer.html}"></th:block>
+    </div>    
+</body>
+</html>
