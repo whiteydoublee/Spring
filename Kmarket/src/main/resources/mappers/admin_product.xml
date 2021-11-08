@@ -5,7 +5,7 @@
 <mapper namespace="kr.co.kmarket.admin.dao.AdminProductDao">
   
   <insert id="insertProduct">
-  	INSERT INTO `km_products` SET
+  	INSERT INTO `km_product` SET
   		`cate1`=#{cate1},
   		`cate2`=#{cate2},
   		`name`=#{name},
