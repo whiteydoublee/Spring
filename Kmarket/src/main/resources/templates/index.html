@@ -90,13 +90,75 @@
   					});
   				});
   				
-  				isRecommendOk = true;
+  				isRecommendOk = true; // scroll바를 여러 번 움직였을 때, ajax 요청을 여러번 하게 되므로, 반복을 막기 위해 flag 변수(상태가 한 번 적용되면, 바뀌지 않게 하는 변수)를 둔다.**
   				
-  			}else if(top > 1000){
+  			}else if(top > 1000 && !isLatestOk){
   				// 최신상품 요청하기
+  				var url = '/getMainProduct?order=rdate'
+  				$.get(url, function(data){
+						
+  					// loading 이미지 제거
+  					sectionNew.find('img[alt=loading]').remove();
+  					
+  					// article 상품정보 출력
+  					$.each(data, function(i, productVo){
+  						
+  						var article = sectionHit.find('article:last-child').clone();
+  						article.find('> a').attr('href', '/product/view');
+  						article.find('.thumb > img').attr('src', '/thumb/'+productVo.cate1+'/'+productVo.cate2+'/'+productVo.thumb1);
+  						article.find('h2').text(productVo.name);
+  						article.find('p').text(productVo.descript);
+  						article.find('.org_price > del').text(productVo.price.toLocaleString());
+  						article.find('.org_price > span').text(productVo.discount+'%');
+  						article.find('.dis_price > ins').text(productVo.salePrice.toLocaleString());
+  						article.find('.dis_price > span').remove();
+  						article.find('.dis_price > strong').remove();
+  						
+  						if(productVo.delivery > 0){
+  							article.find('.dis_price').append('<strong>배송비 '+productVo.delivery.toLocaleString()+'</strong>');
+  						}else{
+  							article.find('.dis_price').append('<span>무료배송</span>');
+  						}
+  						
+  						sectionNew.append(article);
+  					});
+  				});
   				
-  			}else if(top > 1500){
+  				isLatestOk = true;
+  				
+  			}else if(top > 1500 && !isDiscountOk){
   				// 할인상품 요청하기
+  				var url = '/getMainProduct?order=discount'
+  	  				$.get(url, function(data){
+  							
+  	  					// loading 이미지 제거
+  	  					sectionDiscount.find('img[alt=loading]').remove();
+  	  					
+  	  					// article 상품정보 출력
+  	  					$.each(data, function(i, productVo){
+  	  						
+  	  						var article = sectionHit.find('article:last-child').clone();
+  	  						article.find('> a').attr('href', '/product/view');
+  	  						article.find('.thumb > img').attr('src', '/thumb/'+productVo.cate1+'/'+productVo.cate2+'/'+productVo.thumb1);
+  	  						article.find('h2').text(productVo.name);
+  	  						article.find('p').text(productVo.descript);
+  	  						article.find('.org_price > del').text(productVo.price.toLocaleString());
+  	  						article.find('.org_price > span').text(productVo.discount+'%');
+  	  						article.find('.dis_price > ins').text(productVo.salePrice.toLocaleString());
+  	  						article.find('.dis_price > span').remove();
+  	  						article.find('.dis_price > strong').remove();
+  	  						
+  	  						if(productVo.delivery > 0){
+  	  							article.find('.dis_price').append('<strong>배송비 '+productVo.delivery.toLocaleString()+'</strong>');
+  	  						}else{
+  	  							article.find('.dis_price').append('<span>무료배송</span>');
+  	  						}
+  	  						
+  	  						sectionDiscount.append(article);
+  	  					});
+  	  				});
+  	  				
+  	  				isDiscountOk = true;
   			}
   		});
   		

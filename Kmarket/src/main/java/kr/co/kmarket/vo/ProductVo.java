@@ -44,7 +44,9 @@ public class ProductVo {
 	
 	//추가필드
 	private int salePrice;
-	
+	private String tit1;
+	private String tit2;
+	private int order = 1;
 	
 	//추가필드
 	private MultipartFile thumbfile1;
