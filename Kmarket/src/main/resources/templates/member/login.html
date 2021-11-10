@@ -12,7 +12,7 @@
             <div id="member-login">
                 <img th:src="@{/img/member_txt_login.gif}" alt="로그인" />
 				<form th:action="@{/member/login}" method="post">
-					<input type="hidden" name="productCode" th:value="${productCode}" />
+					<input type="hidden" name="productCode" th:if="${productCode}" th:value="${productCode}" />
 					<div>
 						<label>
 							<span><img th:src="@{/img/member_txt_id.gif}" alt="아이디"></span> 
