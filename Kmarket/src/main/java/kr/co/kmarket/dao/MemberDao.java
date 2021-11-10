@@ -11,7 +11,7 @@ public interface MemberDao {
 	public void insertMember(MemberVo vo);
 	public void insertSellerMember(MemberVo vo);
 	public MemberTermsVo selectTerms();
-	public MemberVo selectMember(String uid, String pass);
+	public MemberVo selectMember(MemberVo vo);
 	public void selectMembers();
 	public int selectCountUid(String uid);
 	public int selectCountEmail(String email);

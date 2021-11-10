@@ -32,19 +32,27 @@ public class MemberController {
 		return "/member/join";
 	}
 	@GetMapping("/member/login")
-	public String login() {
+	public String login(int productCode, Model model) {
+		
+		model.addAttribute("productCode", productCode);
+		
 		return "/member/login";
 	}
 	@PostMapping("/member/login")
-	public String login(HttpSession sess, String uid,String pass) {
+	public String login(HttpSession sess, MemberVo vo) {
 		
-		MemberVo vo = service.selectMember(uid,pass);
-		if (vo==null) {
-			//회원 X
-			return "redirect:member/login?success=103";
+		MemberVo memberVo = service.selectMember(vo);
+		
+		if(vo != null) {
+			sess.setAttribute("sessMember", memberVo);
+
+			if(vo.getProductCode() > 0) {
+				return "redirect:/product/view?productCode="+vo.getProductCode();
+			}else {
+				return "redirect:/";	
+			}
 		}else {
-			sess.setAttribute("sessMember", vo);
-			return "redirect:/index?success=103";
+			return "redirect:/member/login?success=100";
 		}
 	}
 	

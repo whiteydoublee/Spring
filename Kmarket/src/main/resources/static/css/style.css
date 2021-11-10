@@ -1002,6 +1002,44 @@ h5.rating.star5 {background-position: 0 -200px;}
     color: #111;
     text-decoration: none;
 }
+
+#view .info > .summary .count {
+	position: relative;
+	width: 100px;
+	height: 40px;
+} 
+#view .info > .summary .count > button {
+	position: absolute;
+    width: 21px;
+    height: 21px;
+    background-image: url(/img/kmarket_buttons.png);
+    font-size: 0;
+    background-color: transparent;
+    border: none;
+}
+#view .info > .summary .count > .decrease {
+	left:0;
+    top:0;
+    background-position: 0px -74px;
+}
+#view .info > .summary .count > .decrease:hover {background-position: -24px -74px;}
+#view .info > .summary .count > .increase {
+	left:70px;
+	top:0;
+	background-position: -48px -74px;
+}
+#view .info > .summary .count > .increase:hover {background-position: -72px -74px;}
+#view .info > .summary .count > input[name=num] {
+	position: absolute;
+	left: 30px;
+	top: 0;
+	width: 30px;
+	height: 21px;
+	border: 1px solid #ececec;
+	font-size: 14px;
+	text-align: center;	
+	border:none;							
+}
 #view .info > .summary .items .price > ins::after {
     content: "원";
 }
@@ -1839,6 +1877,9 @@ h5.rating.star5 {background-position: 0 -200px;}
   padding: 0 10px;
   border-right: 1px solid #ddd;
 }
+#search > .sort > li > a.on {
+  font-weight:bold;
+}
 
 #search > section > article {
   width: 100%;
@@ -1972,3 +2013,4 @@ h5.rating.star5 {background-position: 0 -200px;}
   color: #fe434c;
   font-weight: bold;
 }
+

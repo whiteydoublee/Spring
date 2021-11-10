@@ -25,8 +25,8 @@ public class MemberService {
 		return dao.selectTerms();
 	}
 	
-	public MemberVo selectMember(String uid, String pass) {
-		return dao.selectMember(uid, pass);
+	public MemberVo selectMember(MemberVo vo) {
+		return dao.selectMember(vo);
 		
 	}
 	public void selectMembers() {}
