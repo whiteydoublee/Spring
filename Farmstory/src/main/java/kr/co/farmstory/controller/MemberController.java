@@ -22,6 +22,7 @@ import kr.co.farmstory.service.MemberService;
 import kr.co.farmstory.vo.MemberVo;
 import kr.co.farmstory.vo.TermsVo;
 
+
 @Controller
 public class MemberController {
 	
