@@ -14,4 +14,11 @@ public class ProductCartVo {
 	private int delivery;
 	private int total;
 	private String rdate;
+	
+	//추가필드
+	private String name;
+	private String thumb1;
+	private int cate1;
+	private int cate2;
+	
 }

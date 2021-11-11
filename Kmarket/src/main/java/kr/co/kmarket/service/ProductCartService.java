@@ -1,6 +1,8 @@
 package kr.co.kmarket.service;
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -20,8 +22,12 @@ public class ProductCartService {
 		return dao.selectCountCart(vo);
 	}
 	public void selectCart() {}
-	public void selectCarts() {}
+	public List<ProductCartVo> selectCarts(String uid) {
+		return dao.selectCarts(uid);
+	}
 	public void updateCart() {}
-	public void deleteCart() {}
+	public int deleteCart(int [] cartIds) {
+		return dao.deleteCart(cartIds);
+	}
 
 }

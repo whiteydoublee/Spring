@@ -32,9 +32,10 @@ public class MemberController {
 		return "/member/join";
 	}
 	@GetMapping("/member/login")
-	public String login(String productCode, Model model) {
+	public String login(String productCode, Model model, String success) {
 		
 		model.addAttribute("productCode", productCode);
+		model.addAttribute("success",success);
 		
 		return "/member/login";
 	}

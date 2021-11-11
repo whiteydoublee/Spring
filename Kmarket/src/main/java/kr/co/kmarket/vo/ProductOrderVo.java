@@ -23,4 +23,6 @@ public class ProductOrderVo {
 	private String rdate;
 	private String completeDate;
 	
+	//추가필드
+	private int [] productCodes;
 }

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="kr.co.kmarket.dao.ProductOrderDao">
+	
+	<insert id="insertOrder" useGeneratedKeys="true" keyProperty="orderId"> <!-- insert된 키값을 리턴 받기위해 -->
+		INSERT INTO `km_product_order` SET 
+			`uid`=#{uid},
+			`count`=#{count},
+			`price`=#{price},
+			`discount`=#{discount},
+			`delivery`=#{delivery},
+			`point`=#{point},
+			`total`=#{total},
+			`rdate`=NOW();
+	</insert>
+	
+	<insert id="insertOrderDetail">
+		INSERT INTO `km_product_order_detail` SET
+			`orderId`=#{orderId},
+			`productCode`=#{productCode};
+	</insert>
+	
+	<select id="selectCountOrder">
+	</select>
+	
+	<select id="selectOrder"></select>
+	
+	<select id="selectOrders">
+	</select>
+	
+	<update id="updateOrder"></update>
+	<delete id="deleteOrder">
+	</delete>
+  
+</mapper>
