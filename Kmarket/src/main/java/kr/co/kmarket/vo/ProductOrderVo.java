@@ -24,5 +24,27 @@ public class ProductOrderVo {
 	private String completeDate;
 	
 	//추가필드
+	private int [] cartIds;
 	private int [] productCodes;
+//	private int [] productCounts;
+	
+	// 추가필드
+	private int productCode;
+	private int pCount;
+	private int cate1;
+	private int cate2;
+	private String thumb1;
+	private String pName;
+	private int pPrice;
+	private int pDiscount;
+	private int pPoint;
+	private int pDelivery;
+	private int salePrice;
+	private String uName;
+	private String uHp;
+	private String uZip;
+	private String uAddr1;
+	private String uAddr2;
+	private int uPoint;
+	
 }

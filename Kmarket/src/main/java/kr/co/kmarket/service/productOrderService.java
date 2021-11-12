@@ -2,10 +2,13 @@ package kr.co.kmarket.service;
 
 
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.kmarket.dao.ProductOrderDao;
+import kr.co.kmarket.vo.ProductCartVo;
 import kr.co.kmarket.vo.ProductOrderVo;
 
 
@@ -21,9 +24,13 @@ public class productOrderService {
 		dao.insertOrderDetail(orderId, productCode);
 	}
 	public void selectCountOrder() {}
+	public List<ProductCartVo> selectOrders(int orderId) {
+		return dao.selectOrders(orderId);
+	}
 	public void selectOrder() {}
-	public void selectOrders() {}
-	public void updateOrder() {}
+	public int updateOrder(ProductOrderVo vo) {
+		return dao.updateOrder(vo);
+	}
 	public void deleteOrder() {}
 	
 	

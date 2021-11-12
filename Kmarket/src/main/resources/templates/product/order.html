@@ -11,6 +11,45 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/bxslider/4.2.12/jquery.bxslider.css">
     <link rel="stylesheet" th:href="@{/css/style.css}"/>
+    <script>
+    	$(document).ready(function(){
+    		
+    		$('input[name=order]').click(function(){
+    			
+    			var orderId = $('input[name=orderId]').val();
+    			var orderer = $('input[name=orderer]').val();
+    			var hp = $('input[name=hp]').val();
+    			var zip = $('input[name=zip]').val();
+    			var addr1 = $('input[name=addr1]').val();
+    			var addr2 = $('input[name=addr2]').val();
+    			var payment = $('input[name=payment]').val();
+    			
+    			var jsonData ={
+    					'orderId' : orderId,
+    					'orderer': orderer,
+    					'hp': hp,
+    					'zip': zip,
+    					'addr1':addr1,
+    					'addr2': addr2,
+    					'payment': payment
+    					//pg사에 제출 양식이 따로 있음
+    			};
+    			
+    			$.ajax({
+    				url:'/product/order-complete',
+    				type:'post',
+    				data: jsonData,
+    				dataType:'json',
+    				success: function(data){
+    					
+    					location.replace('/product/order-complete'); // <-> location.href => history를 남기고, replace는 남기지 않음.    					
+    				}
+    			});
+    			
+    		});
+    		
+    	});
+    </script>
 </head>
 <body>
     <div id="wrapper">
@@ -40,6 +79,8 @@
                                 <th>상품명</th>
                                 <th>총수량</th>
                                 <th>판매가</th>
+                                <th>할인</th>
+                                <th>포인트</th>
                                 <th>배송비</th>
                                 <th>소계</th>
                               </tr>
@@ -48,72 +89,61 @@
                               <tr class="empty">
                                 <td colspan="7">장바구니에 상품이 없습니다.</td>
                               </tr>
-                              <tr>
-                                <td>
-                                  <article>
-                                    <a href="#"><img th:src="@{/img/thumb-sample-t2.jpg}" alt=""></a>
-                                    <div>
-                                      <h2><a href="#">TH-블락체크 셔츠-그레이2 [면세]</a></h2>
-                                      <p>SIZE:M / COLOR:블루 1개</p>
-                                    </div>
-                                  </article>
-                                </td>
-                                <td>1</td>
-                                <td>27,000</td>
-                                <td>무료배송</td>
-                                <td>27,000</td>
-                              </tr>
-                              <tr>
-                                <td>
-                                  <article>
-                                    <a href="#"><img th:src="@{/img/thumb-sample-t1.jpg}" alt=""></a>
-                                    <div>
-                                      <h2><a href="#">TH-블락체크 셔츠-그레이2 [면세]</a></h2>
-                                      <p>SIZE:M / COLOR:블루 1개</p>
-                                    </div>
-                                  </article>
-                                </td>
-                                <td>1</td>
-                                <td>27,000</td>
-                                <td>무료배송</td>
-                                <td>27,000</td>
-                              </tr>
+                               <tr th:each="product:${products}" class="orderProduct">
+		                        <td>
+		                          <article>
+		                            <a th:href="@{#}"><img th:src="@{/thumb/{cate1}/{cate2}/{img}(cate1=${product.cate1}, cate2=${product.cate2}, img=${product.thumb1})}" alt=""></a>
+		                            <div>
+		                              <h2><a href="#">[[${product.pName}]]</a></h2>
+		                            </div>
+		                          </article>
+		                        </td>
+		                        <td class="count">[[${product.pCount}]]</td>
+		                        <td class="price">[[${#numbers.formatInteger(product.pPrice, 3, 'COMMA')}]]원</td>
+		                        <td class="discount">[[${product.pDiscount}]]%</td>
+		                        <td class="point">[[${product.pPoint}]]</td>
+		                        <td class="delivery" th:if="${product.pDelivery == 0}">무료배송</td>
+		                        <td class="delivery" th:if="${product.pDelivery != 0}">[[${#numbers.formatInteger(product.pDelivery, 3 , 'COMMA')}]]원</td>
+		                        <td class="total">[[${#numbers.formatInteger(product.pCount * product.salePrice, 3, 'COMMA')}]]원</td>
+		                      </tr>
+                              
                             </tbody>
                           </table>                      
                     </div>
                     
                     <section>
                         <article class="delivery">
+                        <input type="hidden" name="orderId" th:value="${productOrderVo.orderId}" />
                           <h1>배송정보</h1>                          
                           <table>
                             <tr>
                               <td>주문자</td>
-                              <td><input type="text" name="orderer" /></td>
+                              <td><input type="text" name="orderer" th:value=${productOrderVo.uName} /></td>
                             </tr>
                             <tr>
                               <td>휴대폰</td>
                               <td>
-                                <input type="text" name="hp" />
+                                <input type="text" name="hp" th:value=${productOrderVo.uHp} />
                                 <span>- 포함 입력</span>
                               </td>
                             </tr>
                             <tr>
                               <td>우편번호</td>
                               <td>
-                                <input type="text" name="zip"/>
+                                <input type="text" name="zip" th:value=${productOrderVo.uZip}/>
                                 <input type="button" value="검색"/>
                               </td>
                             </tr>
                             <tr>
                               <td>기본주소</td>
                               <td>
-                                <input type="text" name="addr1"/>
+                                <input type="text" name="addr1" th:value=${productOrderVo.uAddr1}/>
                               </td>
                             </tr>
                             <tr>
                               <td>상세주소</td>
                               <td>
-                                <input type="text" name="addr2"/>
+                                <input type="text" name="addr2" th:value=${productOrderVo.uAddr2} />
                               </td>
                             </tr>
                           </table>
@@ -123,7 +153,7 @@
                             <h1>할인정보</h1>
     
                             <div>
-                                <p>현재 포인트 : <span>7200</span>점</p>
+                                <p>현재 포인트 : <span>[[${productOrderVo.uPoint}]]</span>점</p>
                                 <label>
                                     <input type="text" name="point" />점
                                     <input type="button" value="적용"/>
@@ -137,23 +167,23 @@
                             <div>
                                 <span>신용카드</span>
                                 <p>
-                                    <label><input type="radio" name="payment" value="type1"/>신용카드 결제</label>
-                                    <label><input type="radio" name="payment" value="type2"/>체크카드 결제</label>                                
+                                    <label><input type="radio" name="payment" value="1"/>신용카드 결제</label>
+                                    <label><input type="radio" name="payment" value="2"/>체크카드 결제</label>                                
                                 </p>
                             </div>
                             <div>
                                 <span>계좌이체</span>
                                 <p>
-                                    <label><input type="radio" name="payment" value="type3"/>실시간 계좌이체</label>
-                                    <label><input type="radio" name="payment" value="type4"/>무통장 입금</label>                                
+                                    <label><input type="radio" name="payment" value="3"/>실시간 계좌이체</label>
+                                    <label><input type="radio" name="payment" value="4"/>무통장 입금</label>                                
                                 </p>
                             </div>
                             <div>
                                 <span>기타</span>
                                 <p>
-                                    <label><input type="radio" name="payment" value="type3"/>휴대폰결제</label>
+                                    <label><input type="radio" name="payment" value="5"/>휴대폰결제</label>
                                     <label>
-                                        <input type="radio" name="payment" value="type4"/>카카오페이
+                                        <input type="radio" name="payment" value="6"/>카카오페이
                                         <img th:src="@{/img/ico_kakaopay.gif}" alt="카카오페이"/>
                                     </label>                                
                                 </p>
@@ -173,31 +203,31 @@
                             <table border="0">
                               <tr>
                                 <td>총</td>
-                                <td>2 건</td>
+                                <td>[[${productOrderVo.count}]]개</td>
                               </tr>
                               <tr>
                                 <td>상품금액</td>
-                                <td>27,000</td>
+                                <td>[[${productOrderVo.price}]]원</td>
                               </tr>
                               <tr>
                                 <td>할인금액</td>
-                                <td>-1,000</td>
+                                <td>-[[${productOrderVo.discount}]]원</td>
                               </tr>
                               <tr>
                                 <td>배송비</td>
-                                <td>0</td>
+                                <td>[[${productOrderVo.delivery}]]원</td>
                               </tr>
                               <tr>
                                 <td>포인트 할인</td>
-                                <td>-1000</td>
+                                <td>-</td>
                               </tr>
                               <tr>
                                 <td>전체주문금액</td>
-                                <td>25,000</td>
+                                <td>[[${productOrderVo.total}]]원</td>
                               </tr>
                               
                             </table>
-                            <input type="button" name="" value="결제하기">
+                            <input type="button" name="order" value="결제하기">
                 
                           </div>
                     </section>                

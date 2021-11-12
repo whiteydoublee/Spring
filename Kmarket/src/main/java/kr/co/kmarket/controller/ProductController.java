@@ -1,6 +1,8 @@
 package kr.co.kmarket.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import javax.servlet.http.HttpSession;
 
@@ -112,7 +114,13 @@ public class ProductController {
 	}
 	
 	@GetMapping("/product/order")
-	public String order() {
+	public String order(int orderId, Model model) {
+		
+		List<ProductCartVo> products = orderservice.selectOrders(orderId);
+		
+		model.addAttribute("products", products);
+		model.addAttribute("productOrderVo", products.get(0));
+		model.addAttribute(orderId); 
 		
 		return "/product/order";
 	}
@@ -120,6 +128,11 @@ public class ProductController {
 	@ResponseBody
 	@PostMapping("/product/order")
 	public String order(ProductOrderVo vo) {
+		
+		
+		
+		//장바구니 주문하기 상품 주문테이블 삭제
+		//cartservice.deleteCart(vo.getCartIds());
 		
 		//장바구니 주문하기 상품 주문테이블 저장
 		orderservice.insertOrder(vo);
@@ -133,7 +146,7 @@ public class ProductController {
 		}
 		
 		JsonObject json = new JsonObject();
-		json.addProperty("result", 1);
+		json.addProperty("orderId", orderId);
 		
 		return new Gson().toJson(json);
 	}
@@ -143,6 +156,25 @@ public class ProductController {
 		
 		return "/product/order-complete";
 	}
+	
+	@ResponseBody
+	@PostMapping("/product/order-complete")
+	public Map<String, Integer> orderComplete(ProductOrderVo vo) {
+		
+		//최종 주문 완료하기
+		int result = orderservice.updateOrder(vo);
+		
+		//Jackson 라이브럴ㅣ로 자바 Map 구조체를 Json 데이터로 변환
+		Map<String, Integer> map = new HashMap<>();
+		map.put("result", result);
+		
+		return map;
+	}
+	
+	
+	
+	
+	
 	@GetMapping("/product/search")
 	public String search(String keyword, Model model) {
 		List<ProductVo> products = service.selectProductSearch(keyword);
