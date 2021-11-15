@@ -171,10 +171,6 @@ public class ProductController {
 		return map;
 	}
 	
-	
-	
-	
-	
 	@GetMapping("/product/search")
 	public String search(String keyword, Model model) {
 		List<ProductVo> products = service.selectProductSearch(keyword);
@@ -184,6 +180,7 @@ public class ProductController {
 		
 		return "/product/search";
 	}
+	
 	@PostMapping("/product/search")
 	public String search(SearchVo vo, Model model) {
 //		System.out.println("chk1 : "+vo.getChk1());

@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import kr.co.kmarket.dao.MemberDao;
+import kr.co.kmarket.dao.MemberRepo;
+import kr.co.kmarket.dao.MemberTermsRepo;
 import kr.co.kmarket.vo.MemberTermsVo;
 import kr.co.kmarket.vo.MemberVo;
 
@@ -11,10 +13,20 @@ import kr.co.kmarket.vo.MemberVo;
 public class MemberService {
 	
 	@Autowired
-	MemberDao dao;
+	private MemberDao dao;
+	
+	@Autowired
+	private MemberRepo repo; 
+	
+	@Autowired
+	private MemberTermsRepo termsrepo;
 	
 	public void insertMember(MemberVo vo) {
-		dao.insertMember(vo);
+//		Mybatis 실행
+		// dao.insertMember(vo);
+		
+//		JPA 실행 
+		repo.save(vo); //save = insert query
 		
 	}
 	public void insertSellerMember(MemberVo vo) {
@@ -22,7 +34,16 @@ public class MemberService {
 		
 	}
 	public MemberTermsVo selectTerms() {
-		return dao.selectTerms();
+		
+//		Mybatis 실행
+//		MemberTermsVo termsVo = dao.selectTerms();
+//		return dao.selectTerms();
+		
+//		JPA실행
+		MemberTermsVo termsVo = termsrepo.findById(1).get(); 
+		return termsVo;
+		
+		
 	}
 	
 	public MemberVo selectMember(MemberVo vo) {

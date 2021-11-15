@@ -7,7 +7,7 @@
 	<insert id="insertMember">
 		INSERT INTO `km_member` SET
 			`uid`=#{uid},
-			`pass`=PASSWORD(#{pass1}),
+			`pass`=PASSWORD(#{pass}),
 			`name`=#{name},
 			`gender`=#{gender},
 			`hp`=#{hp},
@@ -23,7 +23,7 @@
 	<insert id="insertSellerMember">
 		INSERT INTO `km_member` SET
 			`uid`=#{uid},
-			`pass`=PASSWORD(#{pass1}),
+			`pass`=PASSWORD(#{pass}),
 			`name`=#{name},
 			`hp`=#{hp},
 			`company`=#{company},
@@ -42,7 +42,7 @@
 	</insert>
 	
 	<select id="selectMember" resultType="kr.co.kmarket.vo.MemberVo">
-		SELECT * FROM `km_member` WHERE `uid`=#{uid} AND `pass`=PASSWORD(#{pass1});
+		SELECT * FROM `km_member` WHERE `uid`=#{uid} AND `pass`=PASSWORD(#{pass});
 	</select>
 	
 	<select id="selectTerms" resultType="kr.co.kmarket.vo.MemberTermsVo">
